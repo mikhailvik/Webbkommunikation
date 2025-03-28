@@ -6,12 +6,13 @@
     <title>IP</title>
 </head>
 <body>
+    <h1>My public IP address</h1>
     <h1 id="ip"></h1>
 
     <script>
         // sjävexekverande funktion
         (async () => {
-           const resp = await fetch('https://vm4430.kaj.pouta.csc.fi:8330/');
+           const resp = await fetch('http://vm4430.kaj.pouta.csc.fi:8330/');
            const respJson = await resp.json();
 
            document.querySelector('#ip').innerHTML = respJson.ip;
