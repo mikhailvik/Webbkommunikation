@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Min webbsida</title>
+</head>
+<body>
+    <h1>Boka rum</h1>
+
+    <label for="date-input">Date:</label>
+    <input type="date" id="date-input" name="date-input">
+    <br><br>
+
+    <label for="text-input">Text:</label>
+    <input type="text" id="text-input" name="text-input">
+    <br><br>
+
+    <label for="room-id">Choose room:</label>
+    <select name="room_id" id="room-id">
+       <!-- loopa rummen som <option> -->
+        <option value="1">Room 1</option>
+        <option value="2">Room 2</option>
+        <option value="3">Room 3</option>
+        <option value="4">Room 4</option>
+    </select>
+
+    <button type="button" onclick="">Skicka</button>
+
+
+    <script>
+        // sjävexekverande funktion
+        (async () => {
+           const resp = await fetch('http://vm4430.kaj.pouta.csc.fi:8332/');
+           const rooms = await resp.json();
+
+           console.log(rooms);
+            
+        })();
+
+    </script>
+</body>
+</html>
