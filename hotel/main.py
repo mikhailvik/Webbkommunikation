@@ -25,7 +25,7 @@ class Booking(BaseModel):
     room_id: int
     datefrom: date # kräver: from datetime import date
     dateto: date
-
+    
 @app.get("/temp")
 def temp():
     with conn.cursor() as cur:
