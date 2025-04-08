@@ -1,23 +1,21 @@
 //GET http://0.0.0.0:8331/rooms
-
 @apiUrl = http://0.0.0.0:8331
-###
 
 GET {{apiUrl}}/temp
 
 ###
 GET {{apiUrl}}/rooms
-###
 
+###
 GET {{apiUrl}}/rooms/0
-###
 
+###
 POST {{apiUrl}}/bookings
-Content-Type:application/json
+Content-Type: application/json
 
 {
     "guest_id": 1,
     "room_id": 2,
     "datefrom": "2025-05-01",
-    "dateto": "2025-05-01"
+    "dateto": "2025-05-02"
 }
