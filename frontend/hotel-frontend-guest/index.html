@@ -14,8 +14,6 @@
         <!-- loopa rummen som <option> -->
     </select> 
     <select id="guest_id">
-        <option value="1">Fredde</option>
-        <option value="2">Jane</option>
     </select>
 
     <p id="dates">
@@ -29,25 +27,33 @@
         <textarea id="addinfo"></textarea>
     </p>
 
-    <h3>Bokningar</h3>
-    <ul id="bookings"></ul>
-
     <input type="button" id="btn-submit" value="Spara bokningen">
 
+    <h3>Bokningar</h3>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Room</th>
+            <th>Guest</th>
+            <th>Tot. Price</th>
+            <th>Check-in</th>
+            <th>Check-out</th>
+        </tr>
+        <tbody id="bookings"></tbody>
+    </table>
 
 
     <script>
-        const API_URL = 'http://vm4430.kaj.pouta.csc.fi:8331';
+        const API_URL = 'http://vm4430.kaj.pouta.csc.fi:8333';
 
         async function getRooms() {
             const resp = await fetch(`${API_URL}/rooms`);
             const rooms = await resp.json();
 
-            
-
             for (r of rooms) {
                 document.querySelector('#room_id').innerHTML += `
                     <option value="${r.id}">
+                        (id:${r.id})
                         ${r.room_number}
                         ${r.type}
                         ${r.price} €
@@ -57,6 +63,18 @@
         };
         getRooms();
 
+        async function getGuests() {
+            const resp = await fetch(`${API_URL}/guests`);
+            const guests = await resp.json();
+
+            for (g of guests) {
+                document.querySelector('#guest_id').innerHTML += `
+                    <option value="${g.id}">${g.name} (${g.visits} besök)</option>
+                `;
+            }
+        };
+        getGuests();
+
         async function getBookings() {
             const resp = await fetch(`${API_URL}/bookings`);
             const bookings = await resp.json();
@@ -64,13 +82,18 @@
             document.querySelector('#bookings').innerHTML = '';
             for (b of bookings) {
                 document.querySelector('#bookings').innerHTML += `
-                    <li>id:${b.id} room:${b.room_id} guest_id:${b.room_id} from:${b.datefrom}</li>
+                    <tr>
+                        <td>${b.id}</td>
+                        <td>${b.room_number}</td>
+                        <td>${b.guest_name}</td>
+                        <td>${b.total_price} €</td>
+                        <td>${b.datefrom}</td>
+                        <td>${b.dateto}</td>
+                    </tr>
                 `;
             }
         };
         getBookings();
-
-
 
         async function saveBooking() {
             datefrom = document.querySelector('#datefrom').value;

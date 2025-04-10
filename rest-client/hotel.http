@@ -1,5 +1,5 @@
 //GET http://0.0.0.0:8331/rooms
-@apiUrl = http://0.0.0.0:8331
+@apiUrl = http://0.0.0.0:8333
 
 GET {{apiUrl}}/temp
 
@@ -18,4 +18,12 @@ Content-Type: application/json
     "room_id": 2,
     "datefrom": "2025-05-01",
     "dateto": "2025-05-02"
+}
+
+###
+PUT {{apiUrl}}/bookings/15?api_key=asdasdasdasdasd
+Content-Type: application/json
+
+{
+    "stars": 5
 }
