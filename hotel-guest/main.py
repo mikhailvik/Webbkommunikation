@@ -118,6 +118,23 @@ def create_booking(booking: Booking, guest: dict = Depends(validate_key)):
     return { "msg": "booking created!", "id": new_id}
 
 
+# Stars
+@app.put("/bookings/{id}")
+def rate_booking(id: int, data: dict, guest: dict = Depends(validate_key)):
+    stars = data.get("stars")
+
+    if not stars or stars < 1 or stars > 5:
+        raise HTTPException(status_code=400, detail="Stars must be between 1 and 5")
+
+    with conn.cursor() as cur:
+        cur.execute(
+            "UPDATE hotel_bookings SET stars = %s WHERE id = %s AND guest_id = %s",
+            [stars, id, guest['id']]
+        )
+
+    return {"message": "Stars saved!"}
+
+
 
 if __name__ == "__main__":
     uvicorn.run(
