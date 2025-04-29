@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Headless WP Demo – Alla inlägg</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 30px;
+      background-color: blueviolet;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 28px;
+      color: white;
+      margin-bottom: 40px;
+    }
+
+    .post {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 5px;
+      max-width: 500px;
+      margin: 0 auto 30px auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .post h2 {
+      font-size: 22px;
+      margin-bottom: 15px;
+      color: #333;
+    }
+
+    .post-content {
+      font-size: 16px;
+      color: #444;
+    }
+  </style>
+</head>
+<body>
+  <h1>Alla inlägg</h1>
+  <div id="posts"></div>
+
+  <script>
+    async function getAllPosts() {
+      try {
+        const res = await fetch("http://localhost:10004/wp-json/wp/v2/posts");
+        const posts = await res.json();
+
+        const container = document.getElementById("posts");
+
+        posts.forEach(post => {
+          const postElement = document.createElement("div");
+          postElement.className = "post";
+
+          postElement.innerHTML = `
+            <h2>${post.title.rendered}</h2>
+            <div class="post-content">${post.content.rendered}</div>
+          `;
+
+          container.appendChild(postElement);
+        });
+      } catch (error) {
+        console.error("Fel vid hämtning av inlägg:", error);
+      }
+    }
+
+    getAllPosts();
+  </script>
+</body>
+</html>

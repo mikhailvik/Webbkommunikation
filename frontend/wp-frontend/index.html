@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Headless WP Demo</title>
+
+<style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 30px;
+      background-color: blueviolet;
+    }
+
+    #post {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 5px;
+      max-width: 500px;
+      margin: 0 auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    #title {
+      text-align: center;
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    #content {
+      font-size: 16px;
+      color: #444;
+    }
+  </style>
+</head>
+<body>
+  <div id="post">
+    <h1 id="title">Laddar inlägg</h1>
+    <div id="content"></div>
+  </div>
+
+  <script>
+    const POST_ID = 57; // 
+
+    async function getWpPost(id) {
+      try {
+        const res = await fetch(`http://localhost:10004/wp-json/wp/v2/posts/${id}`);
+        const post = await res.json();
+
+        document.querySelector('#title').innerHTML = post.title.rendered;
+        document.querySelector('#content').innerHTML = post.content.rendered;
+      } catch (error) {
+        document.querySelector('#title').innerHTML = "Kunde inte ladda inlägget.";
+        console.error("Fel", error);
+      }
+    }
+
+    getWpPost(POST_ID);
+  </script>
+</body>
+</html>
+
