@@ -2,18 +2,17 @@ import uvicorn
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 
-PORT=8331
+PORT=8333
 
 app = FastAPI()
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
 
 # "List of dicts" i python är ungefär samma som en "array of objects" (i JS)
 rooms = [
-    { "number": 103, "type": "single", "price": 89.9 },
-    { "number": 204, "type": "double", "price": 120.5 },
-    { "number": 305, "type": "family", "price": 150.8 }
+    { "number": 303, "type": "single", "price": 199.9 },
+    { "number": 404, "type": "double", "price": 350.1 },
+    { "number": 505, "type": "suite", "price": 500 }
 ]
-
 
 # Get all rooms
 @app.get("/rooms")

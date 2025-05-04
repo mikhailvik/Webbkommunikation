@@ -1,4 +1,3 @@
-
 CREATE TABLE public.hotel_rooms ( 
   id SERIAL,
   room_number INT NOT NULL,

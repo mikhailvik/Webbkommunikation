@@ -3,7 +3,7 @@ from psycopg.rows import dict_row
 from dotenv import load_dotenv
 from fastapi import FastAPI, Request, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
+from pydantic import BaseModel, conint
 from typing import Optional
 from datetime import date, timedelta 
 from markupsafe import escape
@@ -27,6 +27,10 @@ class Booking(BaseModel):
     datefrom: date # kräver: from datetime import date
     dateto: Optional[date] = None
     addinfo: Optional[str] = ""
+
+# datamodell som ska valideras
+class BookingUpdate(BaseModel):
+    stars: conint(ge=1, le=5)
     
 # Funktion för att validera API-key.    
 def validate_key(api_key: str = ""):
@@ -118,23 +122,18 @@ def create_booking(booking: Booking, guest: dict = Depends(validate_key)):
     return { "msg": "booking created!", "id": new_id}
 
 
-# Stars
+# Update booking
 @app.put("/bookings/{id}")
-def rate_booking(id: int, data: dict, guest: dict = Depends(validate_key)):
-    stars = data.get("stars")
-
-    if not stars or stars < 1 or stars > 5:
-        raise HTTPException(status_code=400, detail="Stars must be between 1 and 5")
-
+def update_booking(id: int, booking: BookingUpdate, guest: dict = Depends(validate_key)):
     with conn.cursor() as cur:
-        cur.execute(
-            "UPDATE hotel_bookings SET stars = %s WHERE id = %s AND guest_id = %s",
-            [stars, id, guest['id']]
-        )
-
-    return {"message": "Stars saved!"}
-
-
+        cur.execute("""
+            UPDATE hotel_bookings SET
+                stars = %s,
+                updated_at = now()
+            WHERE id = %s
+            AND guest_id = %s
+        """, [booking.stars, id, guest['id']])
+        return { "msg": "booking updated!" }
 
 if __name__ == "__main__":
     uvicorn.run(

@@ -44,7 +44,7 @@
 
 
     <script>
-        const API_URL = 'http://vm4430.kaj.pouta.csc.fi:8333';
+        const API_URL = 'http://vm4430.kaj.pouta.csc.fi:8003';
 
         async function getRooms() {
             const resp = await fetch(`${API_URL}/rooms`);
@@ -76,9 +76,7 @@
         getGuests();
 
         async function getBookings() {
-
-        try {  
-            const resp = await fetch(`${API_URL}/bookings?api_key=${api_key}`);
+            const resp = await fetch(`${API_URL}/bookings`);
             const bookings = await resp.json();
 
             document.querySelector('#bookings').innerHTML = '';
@@ -91,51 +89,11 @@
                         <td>${b.total_price} €</td>
                         <td>${b.datefrom}</td>
                         <td>${b.dateto}</td>
-                        <td>${b.addinfo || ''}</td>
-                        <td>
-                                <select id="stars-${b.id}">
-                                    <option value="1" ${b.stars === 1 ? 'selected' : ''}>★</option>
-                                    <option value="2" ${b.stars === 2 ? 'selected' : ''}>★★</option>
-                                    <option value="3" ${b.stars === 3 ? 'selected' : ''}>★★★</option>
-                                    <option value="4" ${b.stars === 4 ? 'selected' : ''}>★★★★</option>
-                                    <option value="5" ${b.stars === 5 ? 'selected' : ''}>★★★★★</option>
-                                </select>
-                                <button onclick="saveStars(${b.id})">Spara</button>
-                        </td>
                     </tr>
                 `;
             }
-         } catch (err) {
-            document.querySelector('#bookings').innerHTML = `
-                <tr>
-                    <td>Ingen bokningar hittades</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                        `;
-                        console.error(err);
-            }
-        }
-
-        async function saveStars(id) {
-            const stars = Number(document.querySelector(`#stars-${id}`).value);
-
-            const resp = await fetch(`${API_URL}/bookings/${id}?api_key=${api_key}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ stars: stars })
-            });
-
-            const result = await resp.json();
-            alert(result.message);
-            getBookings(); // uppdatera
-        }
-
+        };
+        getBookings();
 
         async function saveBooking() {
             datefrom = document.querySelector('#datefrom').value;
