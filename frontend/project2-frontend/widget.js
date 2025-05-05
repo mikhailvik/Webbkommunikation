@@ -1,4 +1,5 @@
-const apiBase = 'http://localhost:8335/todos';  //Real host
+//const apiBase = 'http://localhost:8335/todos';  //Real host
+const apiBase = 'http://vm4430.kaj.pouta.csc.fi:8335/todos';
 
 function getApiKey() {
   return localStorage.getItem('apiKey');
@@ -22,9 +23,11 @@ async function fetchTodos() {
     return;
   }
 
-  const res = await fetch(apiBase, {
-    headers: { 'Authorization': `Bearer ${apiKey}` }
-  });
+  //const res = await fetch(apiBase, {
+  //headers: { 'Authorization': `Bearer ${apiKey}` }
+  //});
+
+  const res = await fetch(`${apiBase}?api_key=${apiKey}`);
 
   if (!res.ok) {
     alert("Misslyckades att hämta ToDo-lista: " + (await res.text()));
@@ -92,7 +95,8 @@ async function addTodo() {
     return;
   }
 
-  const res = await fetch(apiBase, {
+  //const res = await fetch(apiBase, {
+  const res = await fetch(`${apiBase}?api_key=${apiKey}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -113,7 +117,8 @@ async function markDone(id) {
   const apiKey = getApiKey();
   const now = new Date().toISOString();
 
-  await fetch(`${apiBase}/${id}`, {
+  //await fetch(`${apiBase}/${id}`, {
+  await fetch(`${apiBase}/${id}?api_key=${apiKey}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -128,7 +133,8 @@ async function markDone(id) {
 async function deleteTodo(id) {
   const apiKey = getApiKey();
 
-  await fetch(`${apiBase}/${id}`, {
+  //await fetch(`${apiBase}/${id}`, {
+  await fetch(`${apiBase}/${id}?api_key=${apiKey}`, {
     method: 'DELETE',
     headers: {
       'Authorization': `Bearer ${apiKey}`
