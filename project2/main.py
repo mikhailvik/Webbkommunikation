@@ -7,6 +7,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Optional
 
+
+PORT=8335
 # Load environment variables
 load_dotenv()
 DB_URL = os.getenv("DB_URL")
@@ -15,11 +17,8 @@ DB_URL = os.getenv("DB_URL")
 # Create DB connection
 conn = psycopg.connect(DB_URL, autocommit=True, row_factory=dict_row)
 
-PORT=8335
-
 app = FastAPI()
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
-
 
 class MyTodo(BaseModel):
     title: str
@@ -58,7 +57,7 @@ def get_todo_notes(user: dict = Depends(user_validate_key)):
         cur.execute("""
             SELECT tn.id, tn.title, tn.done, tn.created_at, tc.category_name
             FROM todo_notes tn
-            JOIN todo_categori tc ON tn.category_id = tc.id
+            JOIN todo_category tc ON tn.category_id = tc.id
             WHERE tn.user_id = %s
             ORDER BY tn.created_at DESC
         """, [user["id"]])

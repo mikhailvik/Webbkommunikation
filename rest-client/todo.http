@@ -1,0 +1,32 @@
+#URL
+@apiUrl = http://vm4430.kaj.pouta.csc.fi:8335
+
+
+###
+# test server
+GET {{apiUrl}}/
+
+###
+# all todos
+GET {{apiUrl}}/todos
+
+
+###
+# new todo
+POST {{apiUrl}}/todos
+Content-Type: application/json
+{
+    "title": "My new task",
+    "category_id": 1
+}
+###
+# update as done
+PUT {{apiUrl}}/todos/1
+Content-Type: application/json
+{
+    "title": "Updated task",
+    "done": "2025-05-06T00:00:00"
+}
+###
+# delete 
+DELETE {{apiUrl}}/todos/1
